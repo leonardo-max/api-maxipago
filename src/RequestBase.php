@@ -1,5 +1,5 @@
 <?php
-namespace Versa\Maxipago;
+namespace Versatecnologia\Maxipago;
 class RequestBase {
     protected $version = '3.1.1.15';
     protected $timeout = 60;

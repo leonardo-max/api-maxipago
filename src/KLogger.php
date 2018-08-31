@@ -1,5 +1,5 @@
 <?php
-namespace Versa\Maxipago;
+namespace Versatecnologia\Maxipago;
 /**
  * Finally, a light, permissions-checking logging class.
  *

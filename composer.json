@@ -5,7 +5,6 @@
     "keywords": ["maxipago", "php", "payments", "lib"],
     "homepage": "http://www.maxipago.com",
     "require": {},
-    "license": "Apache 2.0",
     "authors": [
         {
             "name": "T. Canabarro",

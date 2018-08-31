@@ -5,7 +5,7 @@ class RequestBase {
     protected $timeout = 60;
     protected static $sslVerifyPeer = 1;
     protected static $sslVerifyHost = 2;
-    /** @var  \Versa\Maxipago\KLogger */
+    /** @var  \Versatecnologia\Maxipago\KLogger */
     public static $logger;
     public static $loggerSev;
     public static $debug;

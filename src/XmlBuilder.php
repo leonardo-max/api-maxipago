@@ -1,7 +1,8 @@
 <?php
+namespace Versa\Maxipago;
 
-class maxiPago_XmlBuilder extends maxiPago_RequestBase {
-
+class XmlBuilder extends RequestBase {
+	/** @var  \SimpleXMLElement */
     protected $xml;
     
     public function __construct($array) {
@@ -10,7 +11,7 @@ class maxiPago_XmlBuilder extends maxiPago_RequestBase {
     }
   
     protected function setRequest() {
-        $this->xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?>'.$this->tag);
+        $this->xml = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?>'.$this->tag);
         if ($this->tag == "<transaction-request></transaction-request>") { 
         	$this->xml->addChild("version", $this->version); 
         }
@@ -415,7 +416,7 @@ class maxiPago_XmlBuilder extends maxiPago_RequestBase {
             $this->xml->order->$type->transactionDetail->payType->onFile->addChild("customerId", $this->customerId);
         }
         else { 
-        	throw new InvalidArgumentException('[maxiPago Class] Invalid payment data for Credit Card transaction.'); 
+        	throw new \InvalidArgumentException('[maxiPago Class] Invalid payment data for Credit Card transaction.');
         }
         $this->setPayment();
         if (($this->saveOnFile) && (!$this->token) && ($this->type != "recurringPayment")) { 
@@ -562,7 +563,7 @@ class maxiPago_XmlBuilder extends maxiPago_RequestBase {
                 $this->xml->order->$type->payment->addChild("creditInstallment");
                 $this->xml->order->$type->payment->creditInstallment->addChild("numberOfInstallments", $this->numberOfInstallments);
                 if ((strlen($this->chargeInterest) > 0) && (!in_array(strtoupper($this->chargeInterest), array("Y", "N")))) { 
-                	throw new InvalidArgumentException("[maxiPago Class] Field 'chargeInterest' accepts only Y or N."); 
+                	throw new \InvalidArgumentException("[maxiPago Class] Field 'chargeInterest' accepts only Y or N.");
                 }
                 elseif (strlen($this->chargeInterest) == 0) { 
                 	$this->chargeInterest = "N"; 
@@ -693,7 +694,7 @@ class maxiPago_XmlBuilder extends maxiPago_RequestBase {
             $this->xml->request->filterOptions->addChild("pageToken", $this->pageToken);
             $this->xml->request->filterOptions->addChild("pageNumber", $this->pageNumber);
         }
-        else { throw new InvalidArgumentException("[maxiPago Class] Field 'filterOptions' is invalid. Please see documention for help."); }
+        else { throw new \InvalidArgumentException("[maxiPago Class] Field 'filterOptions' is invalid. Please see documention for help."); }
     }
 
 }

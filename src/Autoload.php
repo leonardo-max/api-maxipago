@@ -1,4 +1,6 @@
 <?php
+
+namespace Versa\Maxipago;
 // This is an autoloader for the maxiPago! SDK.
 // If you are not using a global autoloader do the following
 // before any other maxiPago files:

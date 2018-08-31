@@ -27,5 +27,10 @@
             "homepage": "https://leonardoweslei.com",
             "role": "Packagist Editor"
         }
-    ]
+    ],
+    "autoload" : {
+        "psr-4" : {
+            "Versa\\Maxipago\\" : "src"
+        }
+    }
 }

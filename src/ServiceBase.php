@@ -1,5 +1,6 @@
 <?php
-class maxiPago_ServiceBase {
+namespace Versa\Maxipago;
+class ServiceBase {
     
     protected $credentials = array();
     protected $host;
@@ -14,14 +15,14 @@ class maxiPago_ServiceBase {
             if ((ctype_digit((string)$mid)) && (strlen($key) == 24)) {
                 $this->credentials["merchantId"] = $mid;
                 $this->credentials["merchantKey"] = $key;
-                if (is_object(maxiPago_RequestBase::$logger)) { 
-                	maxiPago_RequestBase::$logger->logNotice('Setting credentials "'.$mid.'" and "'.maxiPago_RequestBase::clearForLog($key).'"'); 
+                if (is_object(RequestBase::$logger)) {
+                	RequestBase::$logger->logNotice('Setting credentials "'.$mid.'" and "'.RequestBase::clearForLog($key).'"');
                 }
             }
-            else { throw new InvalidArgumentException('[maxiPago Class error] Invalid credentials.', 401); }
+            else { throw new \InvalidArgumentException('[maxiPago Class error] Invalid credentials.', 401); }
         }
-        catch (Exception $e) {
-            if (is_object(maxiPago_RequestBase::$logger)) { maxiPago_RequestBase::$logger->logFatal($e->getMessage()." in ".$e->getFile()." on line ".$e->getLine()); }
+        catch (\Exception $e) {
+            if (is_object(RequestBase::$logger)) { RequestBase::$logger->logFatal($e->getMessage()." in ".$e->getFile()." on line ".$e->getLine()); }
             throw $e;
         }
     }
@@ -33,20 +34,20 @@ class maxiPago_ServiceBase {
     public function setEnvironment($param=null) {
         try {
             if (strtoupper($param) == 'TEST') {
-            	maxiPago_RequestBase::setSslVerify(false);
+            	RequestBase::setSslVerify(false);
             	$this->host = 'https://testapi.maxipago.net';
             }
             elseif (strtoupper($param) == 'LIVE') { 
             	$this->host = 'https://api.maxipago.net'; 
             }
-            else { throw new BadMethodCallException('[maxiPago Class error] Invalid environment. '.__METHOD__.' accepts either "TEST" or "LIVE"', 400); }
-            if (is_object(maxiPago_RequestBase::$logger)) { 
-            	maxiPago_RequestBase::$logger->logNotice('Setting enviroment to "'.$param.'"'); 
+            else { throw new \BadMethodCallException('[maxiPago Class error] Invalid environment. '.__METHOD__.' accepts either "TEST" or "LIVE"', 400); }
+            if (is_object(RequestBase::$logger)) {
+            	RequestBase::$logger->logNotice('Setting enviroment to "'.$param.'"');
             }
         }
-        catch (Exception $e) {
-            if (is_object(maxiPago_RequestBase::$logger)) { 
-            	maxiPago_RequestBase::$logger->logCrit($e->getMessage()." in ".$e->getFile()." on line ".$e->getLine()); }
+        catch (\Exception $e) {
+            if (is_object(RequestBase::$logger)) {
+            	RequestBase::$logger->logCrit($e->getMessage()." in ".$e->getFile()." on line ".$e->getLine()); }
             throw $e;
         }
     }
@@ -57,9 +58,9 @@ class maxiPago_ServiceBase {
      */
     public function setDebug($param=false) {
         if (($param == true) || ($param == "1")) { 
-            maxiPago_RequestBase::$debug = true;
-            if (is_object(maxiPago_RequestBase::$logger)) { 
-            	maxiPago_RequestBase::$logger->logDebug('Enabling on-screen debug ouput'); 
+            RequestBase::$debug = true;
+            if (is_object(RequestBase::$logger)) {
+            	RequestBase::$logger->logDebug('Enabling on-screen debug ouput');
             }
         }
     }
@@ -68,16 +69,16 @@ class maxiPago_ServiceBase {
      * Enables logger output
      * @param string $path
      * @param string $severity
-     * @throws Exception
+     * @throws \Exception
      */
     public function setLogger($path, $severity='NOTICE') {
         if (!isset($path)) { 
-        	throw new Exception('Logger path '.$path.' is required'); 
+        	throw new \Exception('Logger path '.$path.' is required');
         }
-        maxiPago_RequestBase::setLogger($path, $severity);
-        if (is_object(maxiPago_RequestBase::$logger)) {
-          maxiPago_RequestBase::$logger->logInfo('Starting transaction log');
-          maxiPago_RequestBase::$logger->logDebug('PLEASE DO NOT USE "DEBUG" LOGGING MODE IN PRODUCTION');
+        RequestBase::setLogger($path, $severity);
+        if (is_object(RequestBase::$logger)) {
+          RequestBase::$logger->logInfo('Starting transaction log');
+          RequestBase::$logger->logDebug('PLEASE DO NOT USE "DEBUG" LOGGING MODE IN PRODUCTION');
         }
     }
     

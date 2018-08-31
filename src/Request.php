@@ -1,12 +1,14 @@
 <?php
-class maxiPago_Request extends maxiPago_XmlBuilder {
+namespace Versa\Maxipago;
+
+class Request extends XmlBuilder {
 
     protected function sendXml() {
         $this->xml = $this->xml->asXML();
         if ((!isset($this->xml)) || (!$this->xml)) { 
-        	throw new RuntimeException('[maxiPago Class] INTERNAL ERROR on '.__METHOD__.' method:'); 
+        	throw new \RuntimeException('[maxiPago Class] INTERNAL ERROR on '.__METHOD__.' method:');
         }
-        if (is_object(maxiPago_RequestBase::$logger)) { 
+        if (is_object(RequestBase::$logger)) {
             self::$logger->logInfo('XML has been generated');
             self::$logger->logDebug(' ', $this->xml);
         }
@@ -20,25 +22,25 @@ class maxiPago_Request extends maxiPago_XmlBuilder {
             CURLOPT_POSTFIELDS => $this->xml);
         curl_setopt_array($curl, $opt);
         $this->xmlResponse = curl_exec($curl);
-        if (is_object(maxiPago_RequestBase::$logger)) { 
+        if (is_object(RequestBase::$logger)) {
         	self::$logger->logInfo('Sending XML to '.$this->endpoint); 
         }
         $curlInfo = curl_getinfo($curl);
         curl_close($curl);
-        if (maxiPago_RequestBase::$debug == true) { 
+        if (RequestBase::$debug == true) {
         	$this->printDebug($curlInfo); 
         }
         if ($this->xmlResponse) { 
         	return $this->parseXml(); 
         }
         else { 
-        	throw new UnexpectedValueException('[maxiPago Class] Connection error with maxiPago! server', 503); 
+        	throw new \UnexpectedValueException('[maxiPago Class] Connection error with maxiPago! server', 503);
         }
     }
     
     private function parseXml($array = array(),$c = 0) {
-        $xmlResponse = new SimpleXMLElement($this->xmlResponse);
-        if (is_object(maxiPago_RequestBase::$logger)) { 
+        $xmlResponse = new \SimpleXMLElement($this->xmlResponse);
+        if (is_object(RequestBase::$logger)) {
             self::$logger->logInfo('XML Response received');
             self::$logger->logDebug(' ', $xmlResponse->asXML());
         }
@@ -87,7 +89,7 @@ class maxiPago_Request extends maxiPago_XmlBuilder {
                 }
             }
         }
-        if (is_object(maxiPago_RequestBase::$logger)) { 
+        if (is_object(RequestBase::$logger)) {
         	self::$logger->logNotice('Parsed parameters received', $array); 
         }
         return $array;

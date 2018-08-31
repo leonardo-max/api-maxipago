@@ -1,5 +1,6 @@
 <?php
-class maxiPago_ResponseBase extends maxiPago_ServiceBase {
+namespace Versa\Maxipago;
+class ResponseBase extends ServiceBase {
 
     public $response;
     

@@ -1,25 +1,30 @@
 <?php
-class maxiPago_RequestBase {
-    
+namespace Versa\Maxipago;
+class RequestBase {
     protected $version = '3.1.1.15';
     protected $timeout = 60;
     protected static $sslVerifyPeer = 1;
     protected static $sslVerifyHost = 2;
+    /** @var  \Versa\Maxipago\KLogger */
     public static $logger;
     public static $loggerSev;
     public static $debug;
+    public $type;
+    public $endpoint;
+    public $tag;
+
 
     public function setEndpoint($param) {
         try {
             if (!$param) { 
-            	throw new BadMethodCallException('[maxiPago Class] INTERNAL ERROR on '.__METHOD__.' method: no Endpoint defined'); 
+            	throw new \BadMethodCallException('[maxiPago Class] INTERNAL ERROR on '.__METHOD__.' method: no Endpoint defined');
             }
             $this->endpoint = $param;
-            if (is_object(maxiPago_RequestBase::$logger)) { 
-            	maxiPago_RequestBase::$logger->logDebug('Setting endpoint to "'.$param.'"'); 
+            if (is_object(RequestBase::$logger)) {
+            	RequestBase::$logger->logDebug('Setting endpoint to "'.$param.'"');
             }
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
             if (is_object(self::$logger)) { 
             	self::$logger->logCrit($e->getMessage()." in ".$e->getFile()." on line ".$e->getLine()); 
             }
@@ -30,11 +35,11 @@ class maxiPago_RequestBase {
     public function setTransactionType($param) {
         try {
             if (!$param) { 
-            	throw new BadMethodCallException('[maxiPago Class] INTERNAL ERROR on '.__METHOD__.' method: no Transaction Type defined'); 
+            	throw new \BadMethodCallException('[maxiPago Class] INTERNAL ERROR on '.__METHOD__.' method: no Transaction Type defined');
             }
             $this->type = $param;
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
         	if (is_object(self::$logger)) { 
         		self::$logger->logCrit($e->getMessage()." in ".$e->getFile()." on line ".$e->getLine()); 
         	}
@@ -45,7 +50,7 @@ class maxiPago_RequestBase {
     public function setVars($array) {
         try {
             if (!$array) { 
-            	throw new BadMethodCallException('[maxiPago Class] INTERNAL ERROR on '.__METHOD__.' method: no array to format.', 400); 
+            	throw new \BadMethodCallException('[maxiPago Class] INTERNAL ERROR on '.__METHOD__.' method: no array to format.', 400);
             }
             foreach($array as $k => $v) { 
             	$this->$k = $v; 
@@ -58,7 +63,7 @@ class maxiPago_RequestBase {
             }
             $this->validateCall();
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
         	if (is_object(self::$logger)) { 
         		self::$logger->logCrit($e->getMessage()." in ".$e->getFile()." on line ".$e->getLine()); 
         	}
@@ -112,7 +117,7 @@ class maxiPago_RequestBase {
         }
         elseif (is_array($text)) {
             @$text["cvvNumber"] = str_ireplace($text["cvvNumber"], str_repeat("*", strlen($text["cvvNumber"])), $text["cvvNumber"]);
-            if (maxiPago_ServiceBase::checkCreditCard(@$text["number"])) { 
+            if (ServiceBase::checkCreditCard(@$text["number"])) {
             	@$text["number"] = str_ireplace($text["number"], substr_replace($text["number"], str_repeat('*',strlen($text["number"])-4),'4'), $text["number"]); 
             }
             return $text;
@@ -128,37 +133,37 @@ class maxiPago_RequestBase {
     private function validateCall() {
         try {
             if ((strlen($this->processorID) > 0) && ((!ctype_digit((string)$this->processorID)) || (strlen($this->processorID) > 2))) { 
-            	throw new InvalidArgumentException("[maxiPago Class] Field 'processorID' is invalid. Please check documentation for valid values."); 
+            	throw new \InvalidArgumentException("[maxiPago Class] Field 'processorID' is invalid. Please check documentation for valid values.");
             }
             if ((strlen($this->number) > 0) && (!ctype_digit((string)$this->number))) { 
-            	throw new InvalidArgumentException("[maxiPago Class] Field 'number' accepts only numerical values."); 
+            	throw new \InvalidArgumentException("[maxiPago Class] Field 'number' accepts only numerical values.");
             }
             if ((strlen($this->expMonth) > 0) && ((strlen($this->expMonth) < 2) || (!ctype_digit((string)$this->expMonth)))) { 
-            	throw new InvalidArgumentException("[maxiPago Class] Credit card expiration month must have 2 digits."); 
+            	throw new \InvalidArgumentException("[maxiPago Class] Credit card expiration month must have 2 digits.");
             }
             if ((strlen($this->expirationMonth) > 0) && ((strlen($this->expirationMonth) < 2) || (!ctype_digit((string)$this->expirationMonth)))) { 
-            	throw new InvalidArgumentException("[maxiPago Class] Credit card expiration month must have 2 digits."); 
+            	throw new \InvalidArgumentException("[maxiPago Class] Credit card expiration month must have 2 digits.");
             }
             if ((strlen($this->expYear) > 0) && ((strlen($this->expYear) < 4) || (!ctype_digit((string)$this->expYear)))) { 
-            	throw new InvalidArgumentException("[maxiPago Class] Credit card expiration year must have 4 digits."); 
+            	throw new \InvalidArgumentException("[maxiPago Class] Credit card expiration year must have 4 digits.");
             }
             if ((strlen($this->expirationYear) > 0) && ((strlen($this->expirationYear) < 2) || (!ctype_digit((string)$this->expirationYear)))) { 
-            	throw new InvalidArgumentException("[maxiPago Class] Credit card expiration year must have 4 digits."); 
+            	throw new \InvalidArgumentException("[maxiPago Class] Credit card expiration year must have 4 digits.");
             }
             if ((strlen($this->numberOfInstallments) > 0) && (!ctype_digit((string)$this->numberOfInstallments))) { 
-            	throw new InvalidArgumentException("[maxiPago Class] Field 'numberOfInstallments' accepts only numerical values."); 
+            	throw new \InvalidArgumentException("[maxiPago Class] Field 'numberOfInstallments' accepts only numerical values.");
             }
             if ((strlen($this->chargeInterest) > 0) && (!in_array(strtoupper($this->chargeInterest), array("Y", "N")))) { 
-            	throw new InvalidArgumentException("[maxiPago Class] Field 'chargeInterest' only accepts Y and N as value."); 
+            	throw new \InvalidArgumentException("[maxiPago Class] Field 'chargeInterest' only accepts Y and N as value.");
             }
             if ((strlen($this->expirationDate) > 0) && (date("Ymd", strtotime($this->expirationDate)) < date("Ymd"))) { 
-            	throw new InvalidArgumentException("[maxiPago Class] Boleto expiration date can only be set in the future."); 
+            	throw new \InvalidArgumentException("[maxiPago Class] Boleto expiration date can only be set in the future.");
             }
             if ((strlen($this->instructions) > 0) && (strlen($this->instructions) > 350)) { 
-            	throw new InvalidArgumentException("[maxiPago Class] Boleto instructions cannot be longer than 350 characters."); 
+            	throw new \InvalidArgumentException("[maxiPago Class] Boleto instructions cannot be longer than 350 characters.");
             }
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
         	if (is_object(self::$logger)) { 
         		self::$logger->logCrit($e->getMessage()." in ".$e->getFile()." on line ".$e->getLine()); 
         	}
@@ -245,12 +250,12 @@ class maxiPago_RequestBase {
                     $this->setRapiRequest();
                     break;
                 default:
-                    throw new BadMethodCallException('[maxiPago Class] Transaction type '.$type.' is invalid. Transaction was not sent.');
+                    throw new \BadMethodCallException('[maxiPago Class] Transaction type '.$type.' is invalid. Transaction was not sent.');
                     break;
             }
             return $this->sendXml();
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
         	if (is_object(self::$logger)) { self::$logger->logCrit($e->getMessage()." in ".$e->getFile()." on line ".$e->getLine()); }
             throw $e;
         }

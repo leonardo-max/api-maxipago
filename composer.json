@@ -30,7 +30,7 @@
     ],
     "autoload" : {
         "psr-4" : {
-            "Versa\\Maxipago\\" : "src"
+            "Versatecnologia\\Maxipago\\" : "src"
         }
     }
 }

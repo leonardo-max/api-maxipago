@@ -1,5 +1,5 @@
 <?php
-namespace Versa\Maxipago;
+namespace Versatecnologia\Maxipago;
 
 class MaxiPago extends ResponseBase {
 

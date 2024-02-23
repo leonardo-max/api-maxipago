@@ -289,6 +289,8 @@ class RequestBase {
     protected $onFileMaxChargeAmount;
     protected $onFilePermission;
     protected $orderByDirection;
+    protected $startRecordNumber;
+    protected $endRecordNumber;
     protected $orderByName;
     protected $orderID;
     protected $pageNumber;

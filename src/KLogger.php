@@ -1,5 +1,5 @@
 <?php
-namespace Versatecnologia\Maxipago;
+namespace LeonardoMax\ApiMaxipago;
 /**
  * Finally, a light, permissions-checking logging class.
  *

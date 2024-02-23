@@ -686,6 +686,8 @@ class XmlBuilder extends RequestBase {
             $this->xml->request->filterOptions->addChild("endTime", $this->endTime);
             $this->xml->request->filterOptions->addChild("orderByName", $this->orderByName);
             $this->xml->request->filterOptions->addChild("orderByDirection", $this->orderByDirection);
+	    $this->xml->request->filterOptions->addChild("startRecordNumber", $this->startRecordNumber);
+            $this->xml->request->filterOptions->addChild("endRecordNumber", $this->endRecordNumber);
         }
         elseif (in_array(strtolower($this->period), array("today", "yesterday", "lastmonth", "thismonth"))) {
             $this->xml->request->filterOptions->addChild("period", $this->period);

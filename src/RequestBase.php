@@ -1,11 +1,11 @@
 <?php
-namespace Versatecnologia\Maxipago;
+namespace LeonardoMax\ApiMaxipago;
 class RequestBase {
     protected $version = '3.1.1.15';
     protected $timeout = 60;
     protected static $sslVerifyPeer = 1;
     protected static $sslVerifyHost = 2;
-    /** @var  \Versatecnologia\Maxipago\KLogger */
+
     public static $logger;
     public static $loggerSev;
     public static $debug;

@@ -1,5 +1,5 @@
 <?php
-namespace Versatecnologia\Maxipago;
+namespace LeonardoMax\ApiMaxipago;
 
 class Request extends XmlBuilder {
 
